@@ -68,6 +68,11 @@
         </footer>
 
         <script type="text/javascript">
+            $("#clear").on("click", function() {
+                $("#tableList").empty();
+                $("#waitList").empty();
+            })
+
             $.get("/api/tables", function (data) {
                 $("#tableList").empty();
                 for (var i = 0; i < data.length; i++) {
