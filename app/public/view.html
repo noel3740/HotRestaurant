@@ -62,23 +62,46 @@
             $("#clear").on("click", function () {
                 $("#tableList").empty();
                 $("#waitList").empty();
-            })
-
-            $.get("/api/tables", function (data) {
-                $("#tableList").empty();
-                createListGroupItems(data, $("#tableList"));
             });
 
-            $.get("/api/waitlist", function (data) {
-                $("#waitList").empty();
-                createListGroupItems(data, $("#waitList"));
-            });
+            function populateLists() {
+                $.get("/api/tables", function (data) {
+                    $("#tableList").empty();
+                    createListGroupItems(data, $("#tableList"));
+                });
 
-            function createListGroupItems(data, parentElement) {
+                $.get("/api/waitlist", function (data) {
+                    $("#waitList").empty();
+                    createListGroupItems(data, $("#waitList"), true);
+                });
+            }
+
+            populateLists();
+
+            function createListGroupItems(data, parentElement, iswaitList) {
                 for (var i = 0; i < data.length; i++) {
                     var listGroupItem = $("<li class='list-group-item mt-4'>");
 
-                    listGroupItem.append($("<h2>").text(`Table # ${i + 1}`));
+                    // Create table header
+                    const tableHeader = $("<h2>").text(`Table # ${i + 1}`);
+
+                    // Create remove reservation button and it's containing div
+                    const removeResoDiv = ($("<div>")
+                        .addClass("text-right float-right")
+                        .append($("<button>")
+                            .addClass("btn btn-danger btn-lg removeReso")
+                            .text("Remove Reservation")
+                            .attr({
+                                "data-route-name": data[i].routeName,
+                                "data-is-wait-list": iswaitList
+                            })
+                        ));
+
+                    // Append the remove reservation button and containing div to the table header
+                    tableHeader.append(removeResoDiv);
+
+                    // Append all the header information to the list group item
+                    listGroupItem.append(tableHeader);
                     listGroupItem.append("<hr>");
                     listGroupItem.append($("<h2>").text(`ID: ${data[i].id}`));
                     listGroupItem.append($("<h2>").text(`Name: ${data[i].name}`));
@@ -88,6 +111,27 @@
                     parentElement.append(listGroupItem);
                 }
             }
+
+            //Remove reservation button on click event
+            $(document).on("click", ".removeReso", function (event) {
+
+                const dataRouteName = $(event.target).attr("data-route-name");
+                const dataIsWaitList = $(event.target).attr("data-is-wait-list");
+
+                //If there is a data route name provided in the button attribute then send a DELETE request to the api
+                if (dataRouteName) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/api/${dataIsWaitList ? "waitlist" : "tables"}/${dataRouteName}`,
+                        success: function (data) {
+                            console.log(data);
+                            populateLists();
+                        }
+                    });
+                }
+
+
+            });
         </script>
 </body>
 

@@ -51,4 +51,36 @@ module.exports = function (app) {
 
         res.json(newTable);
     });
+
+    //Delete table api route
+    app.delete("/api/tables/:routeName", function(req, res){
+        var chosen = req.params.routeName;
+
+        console.log(chosen);
+
+        for (var i = 0; i < tables.length; i++) {
+            if (chosen === tables[i].routeName) {
+                tables.splice(i, 1);
+                return res.json(true);
+            }
+        }
+
+        return res.json(false);
+    });
+
+    //Delete waitlist api route
+    app.delete("/api/waitlist/:routeName", function(req, res){
+        var chosen = req.params.routeName;
+
+        console.log(chosen);
+
+        for (var i = 0; i < waitlist.length; i++) {
+            if (chosen === waitlist[i].routeName) {
+                waitlist.splice(i, 1);
+                return res.json(true);
+            }
+        }
+
+        return res.json(false);
+    });
 };
