@@ -7,4 +7,6 @@ var tables = [
         phone: "111-222-3333",
         routeName: "testPerson"
     }
-]
+];
+
+module.exports.tables = tables;

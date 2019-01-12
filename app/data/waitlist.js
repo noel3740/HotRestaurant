@@ -7,4 +7,6 @@ var waitlist = [
         phone: "222-333-4444",
         routeName: "joeShmo"
     }
-]
+];
+
+module.exports.waitlist = waitlist;

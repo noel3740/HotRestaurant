@@ -1,6 +1,5 @@
 //Add dependencies
 var express = require("express");
-var path = require("path");
 
 //Set up the express app
 var app = express();
@@ -10,8 +9,11 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
-
+//Server Routes
+var apiRoutes=require("./app/routing/apiRoutes");
+apiRoutes(app);
+var htmlRoutes=require("./app/routing/htmlRoutes");
+htmlRoutes(app);
 
 // Starts the server to begin listening
 // =============================================================
