@@ -61,6 +61,18 @@ module.exports = function (app) {
         for (var i = 0; i < tables.length; i++) {
             if (chosen === tables[i].routeName) {
                 tables.splice(i, 1);
+
+                // If there are any people in the waitlist 
+                //then add them to the reservation list to fill up the 5 spots
+                if (waitlist.length > 0 && tables.length < 5) {
+
+                    const reservationPositionsAvailable = (5 - tables.length);
+                    const numWaitListsToMove = (waitlist.length >= reservationPositionsAvailable) ? reservationPositionsAvailable : waitlist.length
+
+                    const waitListItemsToMove = waitlist.splice(0, numWaitListsToMove);
+                    tables = tables.concat(waitListItemsToMove);
+                }
+
                 return res.json(true);
             }
         }
