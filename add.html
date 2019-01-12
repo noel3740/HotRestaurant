@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hot Restaraunt</title>
+    <!-- Latest compiled and minified CSS & JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1><i class="fa fa-fire"></i>Hot Restaraunt</h1>
+            <hr>
+            <h2 class="mb-4">Current Reservations and Waiting List</h2>
+            <a href="/add"><button class="btn btn-danger btn-lg"><span class="fa fa-credit-card"></span> Make
+                    Reservation</button></a>
+            <a href="/"><button class="btn btn-default btn-lg"><span class="fa fa-home"></span></button></a>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Reservation Page -->
+                <div class="card">
+                    <div class="card-header">
+                        Table Reservation
+                    </div>
+                    <div class="card-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="reserve-name">Name</label>
+                                <input type="text" class="form-control" id="reserve-name" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                            </div>
+                            <div class="form-group">
+                                <label for="reserve-phone">Phone Number</label>
+                                <input type="text" class="form-control" id="reserve-phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="reserve-email">Email</label>
+                                <input type="text" class="form-control" id="reserve-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="reserve-unique-id">Unique ID</label>
+                                <input type="text" class="form-control" id="reserve-unique-id">
+                            </div>
+                            <button id="add-btn" type="submit" class="btn btn-primary submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="mt-4">
+            <div class="container">
+                <p>
+                    <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API Wait List</a>
+                </p>
+            </div>
+        </footer>
+
+        <script type="text/javascript">
+            // handle the submit button on click event
+            $("#add-btn").on("click", function (event) {
+                event.preventDefault();
+
+                //Create an object to hold the table reservation
+                var newTable = {
+                    id: $("#reserve-unique-id").val().trim(),
+                    name: $("#reserve-name").val().trim(),
+                    email: $("#reserve-email").val().trim(),
+                    phone: $("#reserve-phone").val().trim()
+                };
+
+                // Post the new table reservation object to the server
+                $.post("/api/tables", newTable)
+                    .then(function (data) {
+                        console.log(data);
+
+                        if (data.onWaitList) {
+                            alert("Sorry, we are out of tables. You have been placed on the waiting list.");
+                        } else {
+                            alert("Your table has been reserved!");
+                        }
+                    });
+
+            });
+
+        </script>
+</body>
+
+</html>
