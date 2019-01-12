@@ -9,4 +9,4 @@ var waitlist = [
     }
 ];
 
-module.exports.waitlist = waitlist;
+module.exports = waitlist;

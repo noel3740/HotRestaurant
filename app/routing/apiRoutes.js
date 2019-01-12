@@ -1,6 +1,6 @@
 //Import data js files
-var tables = require("../data/tables").tables;
-var waitlist = require("../data/waitlist").waitlist;
+var tables = require("../data/tables");
+var waitlist = require("../data/waitlist");
 
 //Export the function
 module.exports = function (app) {

@@ -9,4 +9,4 @@ var tables = [
     }
 ];
 
-module.exports.tables = tables;
+module.exports = tables;
