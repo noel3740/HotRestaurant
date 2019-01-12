@@ -31,16 +31,7 @@
                     <h4>Current Reservations</h4>
                 </div>
                 <div class="card-body">
-                    <ul id="tableList" class="list-group">
-                        <li class="list-group-item mt-4">
-                            <h2>Table #1</h2>
-                            <hr>
-                            <h2>ID: lie;aei;e</h2>
-                            <h2>Name: aleiea</h2>
-                            <h2>Email: lianmfe;ai</h2>
-                            <h2>Phone: io3ni;ea</h2>
-                        </li>
-                    </ul>
+                    <ul id="tableList" class="list-group"></ul>
                 </div>
             </div>
         </section>
@@ -68,38 +59,34 @@
         </footer>
 
         <script type="text/javascript">
-            $("#clear").on("click", function() {
+            $("#clear").on("click", function () {
                 $("#tableList").empty();
                 $("#waitList").empty();
             })
 
             $.get("/api/tables", function (data) {
                 $("#tableList").empty();
-                for (var i = 0; i < data.length; i++) {
-                    console.log(data[i]);
-                    $("#tableList").append(createListGroupItem(data[i], i));
-                }
+                createListGroupItems(data, $("#tableList"));
             });
 
             $.get("/api/waitlist", function (data) {
                 $("#waitList").empty();
-                for (var i = 0; i < data.length; i++) {
-                    console.log(data[i]);
-                    $("#waitList").append(createListGroupItem(data[i], i));
-                }
+                createListGroupItems(data, $("#waitList"));
             });
 
-            function createListGroupItem(data, tableNumber) {
-                var listGroupItem = $("<li class='list-group-item mt-4'>");
+            function createListGroupItems(data, parentElement) {
+                for (var i = 0; i < data.length; i++) {
+                    var listGroupItem = $("<li class='list-group-item mt-4'>");
 
-                listGroupItem.append($("<h2>").text(`Table # ${tableNumber + 1}`));
-                listGroupItem.append("<hr>");
-                listGroupItem.append($("<h2>").text(`ID: ${data.id}`));
-                listGroupItem.append($("<h2>").text(`Name: ${data.name}`));
-                listGroupItem.append($("<h2>").text(`Email: ${data.email}`));
-                listGroupItem.append($("<h2>").text(`Phone: ${data.phone}`));
+                    listGroupItem.append($("<h2>").text(`Table # ${i + 1}`));
+                    listGroupItem.append("<hr>");
+                    listGroupItem.append($("<h2>").text(`ID: ${data[i].id}`));
+                    listGroupItem.append($("<h2>").text(`Name: ${data[i].name}`));
+                    listGroupItem.append($("<h2>").text(`Email: ${data[i].email}`));
+                    listGroupItem.append($("<h2>").text(`Phone: ${data[i].phone}`));
 
-                return listGroupItem;
+                    parentElement.append(listGroupItem);
+                }
             }
         </script>
 </body>
